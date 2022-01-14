@@ -63,7 +63,7 @@ jobs:
         uses: matlab-actions/run-tests@v1
         with:
           select-by-folder: matlab/test
-  macOS Build:
+  macOSBuild:
     name: AMD64 MacOS 10.15 MATLAB
     runs-on: macos-latest
     steps:

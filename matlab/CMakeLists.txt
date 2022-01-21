@@ -17,6 +17,9 @@
 
 cmake_minimum_required(VERSION 3.20)
 
+message(STATUS "*****************************************WIN32: ${WIN32}")
+message(STATUS "*****************************************UNIX: ${UNIX}")
+
 # Build the Arrow C++ libraries.
 function(build_arrow)
   set(options BUILD_GTEST)

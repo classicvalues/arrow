@@ -102,6 +102,7 @@ jobs:
       - name: Install MATLAB
         uses: matlab-actions/setup-matlab@v1
       - name: Run vcvarsall.bat
+        shell: cmd
         run: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
       - name: Build MATLAB Interface
         env:

@@ -59,7 +59,7 @@ jobs:
           # is executed within the MATLAB address space, runtime linking
           # errors will occur. To work around this issue, we can explicitly
           # force MATLAB to use the system libstdc++.so via LD_PRELOAD.
-          LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+          # LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libstdc++.so.6
 
           # Add the installation directory to the MATLAB Search Path by
           # setting the MATLABPATH environment variable.

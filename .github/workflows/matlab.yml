@@ -48,7 +48,9 @@ jobs:
       - name: Install ninja-build
         run: sudo apt-get install ninja-build
       - name: Install MATLAB
-        uses: matlab-actions/setup-matlab@v1 release R2021a
+        uses: matlab-actions/setup-matlab@v1
+        with:
+          release: R2021a
       - name: Build MATLAB Interface
         run: ci/scripts/matlab_build.sh $(pwd)
       - name: Run MATLAB Tests

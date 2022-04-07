@@ -298,6 +298,8 @@ target_link_libraries(arrow_matlab arrow_shared)
 # Declare a dependency on the MEX shared library (libmex.so/dylib/dll).
 target_link_libraries(arrow_matlab ${Matlab_MX_LIBRARY})
 target_link_libraries(arrow_matlab ${Matlab_MEX_LIBRARY})
+target_link_libraries(arrow_matlab ${Matlab_DATAARRAY_LIBRARY})
+# target_link_libraries(arrow_matlab ${Matlab_ENGINE_LIBRARY})
 
 # Include the MATLAB MEX headers.
 target_include_directories(arrow_matlab PRIVATE ${Matlab_INCLUDE_DIRS})

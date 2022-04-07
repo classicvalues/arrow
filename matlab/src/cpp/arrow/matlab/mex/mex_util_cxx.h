@@ -15,26 +15,26 @@
 // specific language governing permissions and limitations
 // under the License.
 
+#pragma once
+
 #include <string>
 #include <functional>
 #include <unordered_map>
+#include <codecvt>
 
-// #include <mex.h>
+#include "MatlabDataArray.hpp"
 
-#include "arrow/matlab/feather/feather_functions.h"
+// #include "mex_functions.h"
+#include "arrow/matlab/api/visibility.h"
 
 namespace arrow {
 namespace matlab {
 namespace mex {
     
-using namespace arrow::matlab::feather;
-
-using mex_fcn_t =
-    std::function<void(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])>;
-
-static const std::unordered_map<std::string, mex_fcn_t> FUNCTION_MAP = {
-    {"featherread", featherread}, {"featherwrite", featherwrite}};
-
+ARROW_MATLAB_EXPORT std::string MDAString_to_utf8(const ::matlab::data::String input);
+    
+// ARROW_MATLAB_EXPORT mex_fcn_t lookup_function(const std::string& function_name);
+    
 } // namespace mex
 } // namespace matlab
 } // namespace arrow

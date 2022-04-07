@@ -15,26 +15,28 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#include <string>
-#include <functional>
-#include <unordered_map>
-
-// #include <mex.h>
-
-#include "arrow/matlab/feather/feather_functions.h"
+#include "mex_util_cxx.h"
 
 namespace arrow {
 namespace matlab {
 namespace mex {
+
+std::string MDAString_to_utf8(const ::matlab::data::String input) {
+  const std::string utf8_string_input = ::std::wstring_convert<
+        std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(input);
+  return utf8_string_input;
+}
+
+
+// mex_fcn_t lookup_function(const std::string& function_name) {
+//   auto kv_pair = FUNCTION_MAP.find(function_name);
+//   if (kv_pair == FUNCTION_MAP.end()) {
+//     mexErrMsgIdAndTxt("MATLAB:arrow:UnknownCppFunction", "Unrecognized C++ function '%s'",
+//                       function_name.c_str());
+//   }
+//   return kv_pair->second;
+// }
     
-using namespace arrow::matlab::feather;
-
-using mex_fcn_t =
-    std::function<void(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])>;
-
-static const std::unordered_map<std::string, mex_fcn_t> FUNCTION_MAP = {
-    {"featherread", featherread}, {"featherwrite", featherwrite}};
-
 } // namespace mex
 } // namespace matlab
 } // namespace arrow

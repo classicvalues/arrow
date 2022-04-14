@@ -21,18 +21,62 @@ namespace arrow {
 namespace matlab {
 namespace mex {
 
+using namespace ::matlab::data;
+
 std::string MDAString_to_utf8(const ::matlab::data::String input) {
   const std::string utf8_string_input = ::std::wstring_convert<
         std::codecvt_utf8_utf16<char16_t>, char16_t>{}.to_bytes(input);
   return utf8_string_input;
 }
 
+// /* Helper function to print a stream to the MATLAB command prompt. */
+// void displayInMATLAB(std::ostringstream& stream, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
+//     // Factory to create MATLAB data arrays
+//     ::matlab::data::ArrayFactory factory;
 
-// mex_fcn_t lookup_function(const std::string& function_name) {
+//     // Pass stream content to MATLAB fprintf function
+//     matlabPtr->feval(u"fprintf", 0,
+//         std::vector<Array>({ factory.createScalar(stream.str()) }));
+//     // Clear stream buffer
+//     stream.str("");
+// }
+
+// void checkArguments(std::vector<::matlab::data::Array> outputs, std::vector<::matlab::data::Array> inputs, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
+//     // Check the number of arguments passed to this mex function
+//     if (inputs.size() < 1)
+//     {
+//         // TODO: refactor into error helper function
+//         // Factory to create MATLAB data arrays
+//         ::matlab::data::ArrayFactory factory;
+
+//         matlabPtr->feval(u"error",
+//             0,
+//             std::vector<Array>({ factory.createScalar("'arrow.cpp.call' requires at least one input argument, which must be the "
+//                     "name of the C++ function to call.") }));
+//     }
+
+//     // Check first input argument
+//     if (inputs[0].getType() != ArrayType::MATLAB_STRING ||
+//         inputs[0].getNumberOfElements() != 1)
+//     {
+//         // TODO: refactor into error helper function
+//         // Factory to create MATLAB data arrays
+//         ::matlab::data::ArrayFactory factory;
+//         matlabPtr->feval(u"error",
+//             0,
+//             std::vector<Array>({ factory.createScalar("The first input argument to 'arrow.cpp.call' must be a scalar string") }));
+//     }
+// }
+
+// mex_fcn_t lookup_function(const std::string& function_name, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
 //   auto kv_pair = FUNCTION_MAP.find(function_name);
 //   if (kv_pair == FUNCTION_MAP.end()) {
-//     mexErrMsgIdAndTxt("MATLAB:arrow:UnknownCppFunction", "Unrecognized C++ function '%s'",
-//                       function_name.c_str());
+//     // TODO: refactor into error helper function
+//     // Factory to create MATLAB data arrays
+//     ::matlab::data::ArrayFactory factory;
+//     matlabPtr->feval(u"error",
+//         0,
+//         std::vector<Array>({ factory.createScalar("Unrecognized C++ function: " + function_name) }));
 //   }
 //   return kv_pair->second;
 // }

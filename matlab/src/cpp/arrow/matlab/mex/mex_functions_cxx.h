@@ -15,32 +15,27 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#pragma once
-
 #include <string>
 #include <functional>
 #include <unordered_map>
-#include <codecvt>
 
-#include "MatlabDataArray.hpp"
 #include "mex.hpp"
+#include "MatlabDataArray.hpp"
 
-
-// #include "mex_functions_cxx.h"
-#include "arrow/matlab/api/visibility.h"
+#include "arrow/matlab/feather/feather_functions_cxx.h"
 
 namespace arrow {
 namespace matlab {
 namespace mex {
     
-ARROW_MATLAB_EXPORT std::string MDAString_to_utf8(const ::matlab::data::String input);
+using namespace arrow::matlab::feather;
+using mex_fcn_signature = void(std::vector<::matlab::data::Array> outputs, std::vector<::matlab::data::Array> inputs);
+using mex_fcn_t = std::function<mex_fcn_signature>;
 
-// ARROW_MATLAB_EXPORT void displayInMATLAB(std::ostringstream& stream, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr);
+static const std::unordered_map<std::string, mex_fcn_t> FUNCTION_MAP = {
+};
+    // {"featherread", featherread}, {"featherwrite", featherwrite}};
 
-// ARROW_MATLAB_EXPORT void checkArguments(std::vector<::matlab::data::Array> outputs, std::vector<::matlab::data::Array> inputs, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr);
-
-// ARROW_MATLAB_EXPORT mex_fcn_t lookup_function(const std::string& function_name, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr);
-    
 } // namespace mex
 } // namespace matlab
 } // namespace arrow

@@ -17,30 +17,19 @@
 
 #pragma once
 
-#include <string>
-#include <functional>
-#include <unordered_map>
-#include <codecvt>
-
-#include "MatlabDataArray.hpp"
 #include "mex.hpp"
+#include "MatlabDataArray.hpp"
 
-
-// #include "mex_functions_cxx.h"
 #include "arrow/matlab/api/visibility.h"
 
 namespace arrow {
 namespace matlab {
-namespace mex {
-    
-ARROW_MATLAB_EXPORT std::string MDAString_to_utf8(const ::matlab::data::String input);
+namespace feather {
 
-// ARROW_MATLAB_EXPORT void displayInMATLAB(std::ostringstream& stream, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr);
+ARROW_MATLAB_EXPORT void featherwrite(::matlab::mex::ArgumentList outputs, ::matlab::mex::ArgumentList inputs);
 
-// ARROW_MATLAB_EXPORT void checkArguments(std::vector<::matlab::data::Array> outputs, std::vector<::matlab::data::Array> inputs, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr);
+ARROW_MATLAB_EXPORT void featherread(::matlab::mex::ArgumentList outputs, ::matlab::mex::ArgumentList inputs);
 
-// ARROW_MATLAB_EXPORT mex_fcn_t lookup_function(const std::string& function_name, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr);
-    
-} // namespace mex
-} // namespace matlab
-} // namespace arrow
+}  // namespace feather
+}  // namespace matlab
+}  // namespace arrow

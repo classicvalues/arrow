@@ -15,26 +15,21 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#include <string>
-#include <functional>
-#include <unordered_map>
+#pragma once
 
-#include <mex.h>
-
-#include "arrow/matlab/feather/feather_functions.h"
+#include <arrow/status.h>
 
 namespace arrow {
 namespace matlab {
-namespace mex {
-    
-using namespace arrow::matlab::feather;
+namespace feather {
+namespace util {
 
-using mex_fcn_t =
-    std::function<void(int nlhs, mxArray* plhs[], int nrhs, const mxArray* prhs[])>;
+// Terminates execution and returns to the MATLAB prompt,
+// displaying an error message if the given status
+// indicates that an error has occurred.
+void HandleStatus(const Status& status);
 
-static const std::unordered_map<std::string, mex_fcn_t> FUNCTION_MAP = {
-    {"featherread", featherread}, {"featherwrite", featherwrite}};
-
-} // namespace mex
-} // namespace matlab
-} // namespace arrow
+}  // namespace util
+}  // namespace feather
+}  // namespace matlab
+}  // namespace arrow

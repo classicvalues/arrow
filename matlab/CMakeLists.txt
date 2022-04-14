@@ -284,11 +284,13 @@ set(MATLAB_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src/cpp/arrow/matlab)
 set(arrow_matlab_sources
     # mex/mex_util.cc
     mex/mex_util_cxx.cc
-    feather/feather_reader.cc
-    feather/feather_writer.cc
-    feather/feather_functions.cc
-    feather/util/handle_status.cc
-    feather/util/unicode_conversion.cc)
+    # feather/feather_reader.cc
+    # feather/feather_writer.cc
+    # feather/feather_functions.cc
+    # feather/feather_functions_cxx.cc
+    # feather/util/handle_status.cc
+    # feather/util/unicode_conversion.cc
+    )
 list(TRANSFORM arrow_matlab_sources PREPEND ${CPP_SOURCE_DIR}/arrow/matlab/)
 
 add_library(arrow_matlab SHARED ${arrow_matlab_sources})
@@ -297,9 +299,10 @@ add_library(arrow_matlab SHARED ${arrow_matlab_sources})
 target_link_libraries(arrow_matlab arrow_shared)
 
 # Declare a dependency on the MEX shared library (libmex.so/dylib/dll).
-target_link_libraries(arrow_matlab ${Matlab_MX_LIBRARY})
+# target_link_libraries(arrow_matlab ${Matlab_MX_LIBRARY})
 target_link_libraries(arrow_matlab ${Matlab_MEX_LIBRARY})
 target_link_libraries(arrow_matlab ${Matlab_DATAARRAY_LIBRARY})
+target_link_libraries(arrow_matlab ${Matlab_ENGINE_LIBRARY})
 
 # Include the MATLAB MEX headers.
 target_include_directories(arrow_matlab PRIVATE ${Matlab_INCLUDE_DIRS})

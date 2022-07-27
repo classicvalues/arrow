@@ -15,28 +15,21 @@
 // specific language governing permissions and limitations
 // under the License.
 
-#include <string>
-#include <functional>
-#include <unordered_map>
-
-#include "mex.hpp"
-#include "MatlabDataArray.hpp"
-
-#include "arrow/matlab/feather/feather_functions_cxx.h"
+#include "MatlabPtr.h"
 
 namespace arrow {
 namespace matlab {
 namespace mex {
-    
-using namespace arrow::matlab::feather;
-using mex_fcn_signature = void(std::vector<::matlab::data::Array> outputs, std::vector<::matlab::data::Array> inputs);
-using mex_fcn_t = std::function<mex_fcn_signature>;
 
-static const std::unordered_map<std::string, mex_fcn_t> FUNCTION_MAP = {
-    {"featherread", featherread}
-};
-    // {"featherread", featherread}, {"featherwrite", featherwrite}};
+    MatlabPtr::MatlabPtr(std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) :
+        matlabPtr(matlabPtr) {};
 
+    static std::shared_ptr<::matlab::engine::MATLABEngine> MatlabPtr::GetMatlabPtr() {
+        if (initialized) {
+            return matlabPtr;
+        }
+        
+    }
 } // namespace mex
 } // namespace matlab
 } // namespace arrow

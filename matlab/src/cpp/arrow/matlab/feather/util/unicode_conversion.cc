@@ -25,38 +25,42 @@ namespace matlab {
 namespace feather {
 namespace util {
 
-mxArray* ConvertUTF8StringToUTF16CharMatrix(const std::string& utf8_string) {
-  // Get pointers to the start and end of the std::string data.
-  const char* string_start = utf8_string.c_str();
-  const char* string_end = string_start + utf8_string.length();
+::matlab::data::MATLABString ConvertUTF8StringToMATLABString(const std::string& utf8_string) {
+  const std::basic_string<char16_t> utf16_string = ::matlab::engine::convertUTF8StringToUTF16String(utf8_string);
+  const ::matlab::data::String matlab_string = ::matlab::data::String(utf16_string);
+  return ::matlab::data::MATLABString(utf16_string);
+  
+//   // Get pointers to the start and end of the std::string data.
+//   const char* string_start = utf8_string.c_str();
+//   const char* string_end = string_start + utf8_string.length();
 
-  // Due to this issue on MSVC: https://stackoverflow.com/q/32055357 we cannot
-  // directly use a destination type of char16_t.
-#if _MSC_VER >= 1900
-  using CharType = int16_t;
-#else
-  using CharType = char16_t;
-#endif
-  using ConverterType = std::codecvt_utf8_utf16<CharType>;
-  std::wstring_convert<ConverterType, CharType> code_converter{};
+//   // Due to this issue on MSVC: https://stackoverflow.com/q/32055357 we cannot
+//   // directly use a destination type of char16_t.
+// #if _MSC_VER >= 1900
+//   using CharType = int16_t;
+// #else
+//   using CharType = char16_t;
+// #endif
+//   using ConverterType = std::codecvt_utf8_utf16<CharType>;
+//   std::wstring_convert<ConverterType, CharType> code_converter{};
 
-  std::basic_string<CharType> utf16_string;
-  try {
-    utf16_string = code_converter.from_bytes(string_start, string_end);
-  } catch (...) {
-    // In the case that any error occurs, just try returning a string in the
-    // user's current locale instead.
-    return mxCreateString(string_start);
-  }
+//   std::basic_string<CharType> utf16_string;
+//   try {
+//     utf16_string = code_converter.from_bytes(string_start, string_end);
+//   } catch (...) {
+//     // In the case that any error occurs, just try returning a string in the
+//     // user's current locale instead.
+//     return mxCreateString(string_start);
+//   }
 
-  // Store the converter UTF-16 string in a mxCharMatrix and return it.
-  const mwSize dimensions[2] = {1, utf16_string.size()};
-  mxArray* character_matrix = mxCreateCharArray(2, dimensions);
-  mxChar* character_matrix_pointer = mxGetChars(character_matrix);
-  std::copy(utf16_string.data(), utf16_string.data() + utf16_string.size(),
-            character_matrix_pointer);
+//   // Store the converter UTF-16 string in a mxCharMatrix and return it.
+//   const mwSize dimensions[2] = {1, utf16_string.size()};
+//   mxArray* character_matrix = mxCreateCharArray(2, dimensions);
+//   mxChar* character_matrix_pointer = mxGetChars(character_matrix);
+//   std::copy(utf16_string.data(), utf16_string.data() + utf16_string.size(),
+//             character_matrix_pointer);
 
-  return character_matrix;
+//   return character_matrix;
 }
 
 }  // namespace util

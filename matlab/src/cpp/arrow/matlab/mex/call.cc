@@ -32,12 +32,10 @@
 
 #include "mex_util_cxx.h"
 
-using namespace matlab::data;
-
 class MexFunction : public matlab::mex::Function {
 
 private:
-    // Pointer to MATLAB engine to call fprintf 
+    // Pointer to MATLAB engine to call fprintf and error
     std::shared_ptr<matlab::engine::MATLABEngine> matlabPtr;
 
 public:
@@ -48,8 +46,11 @@ public:
 
     void operator()(matlab::mex::ArgumentList outputs, matlab::mex::ArgumentList inputs) {
 
+        // TODO: determine whether this conversion needs to use a const iterator, potential for copies.
         // Validate input arguments
-        checkArguments(outputs, inputs, matlabPtr);
+        // const std::vector<::matlab::data::Array> vectorInputs(inputs.begin(), inputs.end());
+        // const std::vector<::matlab::data::Array> vectorOutputs(outputs.begin(), outputs.end());
+        arrow::matlab::mex::checkArguments(outputs, inputs, matlabPtr);
 
         // Debugging: print to MATLAB by passing an ostringstream's contents to fprintf, via feval
         // Create an output stream
@@ -59,17 +60,18 @@ public:
 
         for (const matlab::data::TypedArray<matlab::data::MATLABString> array : inputs) {
             if (array[0].has_value()) {
-                const matlab::data::String string_input = String(array[0]);
+                const matlab::data::String string_input = ::matlab::data::String(array[0]);
 
                 // Convert the UTF-16 string to UTF-8 before adding to stream
                 // https://en.cppreference.com/w/cpp/locale/codecvt_utf8_utf16
                 // matlab engine function to convert: https://codesearch.mathworks.com/fileView?searchText=mexEngineUtilImpl&searchField=filename&cluster=Bmain&template_id=1&relPath=matlab%2Fextern%2Finclude%2Fcppmex%2Fdetail%2F&filename=mexEngineUtilImpl.hpp&searchType=basicIndex
-                std::string utf8_string_input = arrow::matlab::mex::MDAString_to_utf8(string_input);
+                // try using this: ::matlab::engine::convertUTF16StringToUTF8String
+                std::string utf8_string_input = matlab::engine::convertUTF16StringToUTF8String(string_input);
                 stream << "Argument: " << utf8_string_input << std::endl;
             }  
         }
 
-        displayInMATLAB(stream, matlabPtr);
+        arrow::matlab::mex::displayInMATLAB(stream, matlabPtr);
 
         // // Get function pointer based on inputs from MATLAB
         // auto array = inputs[0];
@@ -82,46 +84,48 @@ public:
         
         // Call function with input and output argument lists
         // fcn(outputs, inputArgs)
+
+        // TODO: Recompose output ArgumentList using std::vector<::matlab::data::Array>
     }
 
-    /* Helper function to print a stream to the MATLAB command prompt. */
-void displayInMATLAB(std::ostringstream& stream, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
-    // Factory to create MATLAB data arrays
-    ::matlab::data::ArrayFactory factory;
+    // /* Helper function to print a stream to the MATLAB command prompt. */
+    // void displayInMATLAB(std::ostringstream& stream, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
+    //     // Factory to create MATLAB data arrays
+    //     ::matlab::data::ArrayFactory factory;
 
-    // Pass stream content to MATLAB fprintf function
-    matlabPtr->feval(u"fprintf", 0,
-        std::vector<Array>({ factory.createScalar(stream.str()) }));
-    // Clear stream buffer
-    stream.str("");
-}
+    //     // Pass stream content to MATLAB fprintf function
+    //     matlabPtr->feval(u"fprintf", 0,
+    //         std::vector<::matlab::data::Array>({ factory.createScalar(stream.str()) }));
+    //     // Clear stream buffer
+    //     stream.str("");
+    // }
 
-void checkArguments(matlab::mex::ArgumentList outputs, matlab::mex::ArgumentList inputs, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
-    // Check the number of arguments passed to this mex function
-    if (inputs.size() < 1)
-    {
-        // TODO: refactor into error helper function
-        // Factory to create MATLAB data arrays
-        ::matlab::data::ArrayFactory factory;
+    // void checkArguments(std::vector<::matlab::data::Array> outputs, std::vector<::matlab::data::Array> inputs, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
+    //     // Check the number of arguments passed to this mex function
+    //     if (inputs.size() < 1)
+    //     {
+    //         // TODO: refactor into error helper function
+    //         // Factory to create MATLAB data arrays
+    //         ::matlab::data::ArrayFactory factory;
 
-        matlabPtr->feval(u"error",
-            0,
-            std::vector<Array>({ factory.createScalar("'arrow.cpp.call' requires at least one input argument, which must be the "
-                    "name of the C++ function to call.") }));
-    }
+    //         matlabPtr->feval(u"error",
+    //             0,
+    //             std::vector<::matlab::data::Array>({ factory.createScalar("'arrow.cpp.call' requires at least one input argument, which must be the "
+    //                     "name of the C++ function to call.") }));
+    //     }
 
-    // Check first input argument
-    if (inputs[0].getType() != ArrayType::MATLAB_STRING ||
-        inputs[0].getNumberOfElements() != 1)
-    {
-        // TODO: refactor into error helper function
-        // Factory to create MATLAB data arrays
-        ::matlab::data::ArrayFactory factory;
-        matlabPtr->feval(u"error",
-            0,
-            std::vector<Array>({ factory.createScalar("The first input argument to 'arrow.cpp.call' must be a scalar string") }));
-    }
-}
+    //     // Check first input argument
+    //     if (inputs[0].getType() != ::matlab::data::ArrayType::MATLAB_STRING ||
+    //         inputs[0].getNumberOfElements() != 1)
+    //     {
+    //         // TODO: refactor into error helper function
+    //         // Factory to create MATLAB data arrays
+    //         ::matlab::data::ArrayFactory factory;
+    //         matlabPtr->feval(u"error",
+    //             0,
+    //             std::vector<::matlab::data::Array>({ factory.createScalar("The first input argument to 'arrow.cpp.call' must be a scalar string") }));
+    //     }
+    // }
 
 // mex_fcn_t lookup_function(const std::string& function_name, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
 //   auto kv_pair = FUNCTION_MAP.find(function_name);
@@ -135,6 +139,7 @@ void checkArguments(matlab::mex::ArgumentList outputs, matlab::mex::ArgumentList
 //   }
 //   return kv_pair->second;
 // }
+
 };
 
 

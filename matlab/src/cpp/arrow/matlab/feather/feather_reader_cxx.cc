@@ -28,11 +28,11 @@
 #include <arrow/type.h>
 #include <arrow/type_traits.h>
 #include <arrow/util/bitmap_visit.h>
-#include <mex.h>
 
 #include <algorithm>
 #include <cmath>
 
+#include "mex.hpp"
 #include "matlab_traits.h"
 #include "util/handle_status.h"
 #include "util/unicode_conversion.h"
@@ -43,8 +43,8 @@ namespace feather {
 namespace internal {
 
 // Read the name of variable i from the Feather file as a mxArray*.
-mxArray* ReadVariableName(const std::string& column_name) {
-  return util::ConvertUTF8StringToUTF16CharMatrix(column_name);
+::matlab::data::MATLABString ReadVariableName(const std::string& column_name) {
+  return util::ConvertUTF8StringToMATLABString(column_name);
 }
 
 template <typename ArrowDataType>
@@ -167,8 +167,8 @@ mxArray* ReadVariableValidityBitmap(const std::shared_ptr<Array>& column) {
 }
 
 // Read the type name of an arrow::Array as an mxChar array.
-mxArray* ReadVariableType(const std::shared_ptr<Array>& column) {
-  return util::ConvertUTF8StringToUTF16CharMatrix(column->type()->name());
+::matlab::data::MATLABString ReadVariableType(const std::shared_ptr<Array>& column) {
+  return util::ConvertUTF8StringToMATLABString(column->type()->name());
 }
 
 // MATLAB arrays cannot be larger than 2^48 elements.

@@ -17,8 +17,8 @@
 
 #pragma once
 
-#include "mex.hpp"
 #include "MatlabDataArray.hpp"
+#include "mex.hpp"
 
 #include "arrow/matlab/api/visibility.h"
 
@@ -26,9 +26,9 @@ namespace arrow {
 namespace matlab {
 namespace feather {
 
-ARROW_MATLAB_EXPORT void featherwrite(::matlab::mex::ArgumentList outputs, ::matlab::mex::ArgumentList inputs);
+// ARROW_MATLAB_EXPORT void featherwrite(::matlab::mex::ArgumentList outputs, ::matlab::mex::ArgumentList inputs);
 
-ARROW_MATLAB_EXPORT void featherread(::matlab::mex::ArgumentList outputs, ::matlab::mex::ArgumentList inputs);
+ARROW_MATLAB_EXPORT void featherread(std::vector<::matlab::data::Array> outputs, std::vector<::matlab::data::Array> inputs);
 
 }  // namespace feather
 }  // namespace matlab

@@ -17,7 +17,8 @@
 
 #pragma once
 
-#include <mex.h>
+#include "mex.hpp"
+#include "MatlabDataArray.hpp"
 
 #include <string>
 
@@ -28,7 +29,7 @@ namespace util {
 
 // Converts a UTF-8 encoded std::string to a heap-allocated UTF-16 encoded
 // mxCharArray.
-mxArray* ConvertUTF8StringToUTF16CharMatrix(const std::string& utf8_string);
+::matlab::data::MATLABString ConvertUTF8StringToMATLABString(const std::string& utf8_string);
 
 }  // namespace util
 }  // namespace feather

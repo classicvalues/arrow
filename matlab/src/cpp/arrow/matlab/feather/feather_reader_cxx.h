@@ -20,10 +20,12 @@
 #include <arrow/ipc/feather.h>
 #include <arrow/status.h>
 #include <arrow/type.h>
-#include <matrix.h>
 
 #include <memory>
 #include <string>
+
+#include "MatlabDataArray.hpp"
+#include "feather/util/handle_status.h"
 
 namespace arrow {
 namespace matlab {
@@ -44,7 +46,7 @@ class FeatherReader {
   ///        Clients are responsible for freeing the returned mxArray memory
   ///        when it is no longer needed, or passing it to MATLAB to be managed.
   /// \return metadata mxArray* scalar struct containing table level metadata
-  mxArray* ReadMetadata() const;
+  ::matlab::data::Array ReadMetadata() const;
 
   /// \brief Read the table variable data as an mxArray* struct array from the
   ///        given Feather file.
@@ -56,7 +58,7 @@ class FeatherReader {
   ///        Clients are responsible for freeing the returned mxArray memory
   ///        when it is no longer needed, or passing it to MATLAB to be managed.
   /// \return variables mxArray* struct array containing table variable data
-  mxArray* ReadVariables();
+  ::matlab::data::Array ReadVariables();
 
   /// \brief Initialize a FeatherReader object from a given Feather file.
   /// \param[in] filename path to a Feather file

@@ -16,22 +16,29 @@
 // under the License.
 
 #include <arrow/status.h>
-#include <mex.h>
+
+#include "mex.hpp"
+#include "feather/util/handle_status.h"
+#include "mex/mex_util_cxx.h"
 
 namespace arrow {
 namespace matlab {
 namespace feather {
 namespace util {
 
-void HandleStatus(const Status& status) {
+void HandleStatus(const Status& status, std::shared_ptr<::matlab::engine::MATLABEngine> matlabPtr) {
+  std::ostringstream stream;
+
+  stream << "Arrow error: "
   const char* arrow_error_message = "Arrow error: %s";
   switch (status.code()) {
     case StatusCode::OK: {
       break;
     }
     case StatusCode::OutOfMemory: {
-      mexErrMsgIdAndTxt("MATLAB:arrow:status:OutOfMemory", arrow_error_message,
-                        status.ToString().c_str());
+      stream << status.ToString().c_str();
+      arrow::matlab::mex::errorInMATLAB("MATLAB:arrow:status:OutOfMemory", arrow_error_message,
+                        matlabPtr);
       break;
     }
     case StatusCode::KeyError: {

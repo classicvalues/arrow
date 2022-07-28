@@ -15,6 +15,12 @@
 # specific language governing permissions and limitations
 # under the License.
 
+
+## TODO: Switch the condition to "is" instead of "in" once "master" is removed from "default_branch".
+{%- macro is_default_branch() -%}
+arrow.branch in arrow.default_branch
+{% endmacro %}
+
 {%- macro github_header() -%}
 # NOTE: must set "Crossbow" as name to have the badge links working in the
 # github comment reports!
@@ -93,7 +99,7 @@ on:
 {% endmacro %}
 
 {%- macro github_upload_gemfury(pattern) -%}
-  {%- if arrow.branch == 'master' -%}
+  {%- if is_default_branch() -%}
   - name: Upload package to Gemfury
     shell: bash
     run: |
@@ -139,7 +145,7 @@ on:
 {% endmacro %}
 
 {%- macro azure_upload_anaconda(pattern) -%}
-  {%- if arrow.branch == 'master' -%}
+  {%- if is_default_branch() -%}
   - task: CondaEnvironment@1
     inputs:
       packageSpecs: 'anaconda-client'
@@ -188,7 +194,7 @@ on:
 {% endmacro %}
 
 {%- macro travis_upload_gemfury(pattern) -%}
-  {%- if arrow.branch == 'master' -%}
+  {%- if is_default_branch() -%}
   - |
     WHEEL_PATH=$(echo arrow/python/repaired_wheels/*.whl)
     curl \
@@ -215,7 +221,7 @@ on:
           continue
         fi
         # Pin the current commit in the formula to test so that
-        # we're not always pulling from master
+        # we're not always pulling from the tip of the default branch
         sed -i '' -E \
           -e 's@https://github.com/apache/arrow.git"$@{{ arrow.remote }}.git", revision: "{{ arrow.head }}"@' \
           ${formula}
@@ -249,7 +255,7 @@ on:
 {% endmacro %}
 
 {%- macro github_test_r_src_pkg() -%}
-  source("https://raw.githubusercontent.com/apache/arrow/master/ci/etc/rprofile")
+  source("https://raw.githubusercontent.com/apache/arrow/HEAD/ci/etc/rprofile")
 
   install.packages(
     "arrow",

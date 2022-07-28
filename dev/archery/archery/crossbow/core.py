@@ -740,6 +740,8 @@ class Target(Serializable):
         self.github_repo = "/".join(_parse_github_user_repo(remote))
         self.version = version
         self.no_rc_version = re.sub(r'-rc\d+\Z', '', version)
+        # TODO: Remove "master" from default_branch after migration to "main".
+        self.default_branch = ["main", "master"]
         # Semantic Versioning 1.0.0: https://semver.org/spec/v1.0.0.html
         #
         # > A pre-release version number MAY be denoted by appending an

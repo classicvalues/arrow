@@ -70,8 +70,6 @@ jobs:
         run: echo "macros.is_default_branch() = {{ macros.is_default_branch() }}"
       - name: Print arrow.branch
         run: echo "arrow.branch = {{ arrow.branch }}"
-      - name: Print arrow.default branch
-        run: echo "arrow.default_branch = {{ arrow.default_branch }}"
       - name: Print arrow.head
         run: echo "arrow.head = {{ arrow.head }}"
       - name: Print arrow.remote

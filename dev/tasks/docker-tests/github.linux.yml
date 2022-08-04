@@ -66,8 +66,6 @@ jobs:
           name: test-output
           path: arrow/r/check/arrow.Rcheck/tests/testthat.Rout*
           if-no-files-found: ignore
-      - name: Print arrow.default_branch
-        run: echo "arrow.default_branch = {{ arrow.default_branch }}"
       - name: Print arrow.branch
         run: echo "arrow.branch = {{ arrow.branch }}"
       - name: Print arrow.head
@@ -76,6 +74,8 @@ jobs:
         run: echo "arrow.remote = {{ arrow.remote }}"
       - name: Print arrow.email
         run: echo "arrow.email = {{ arrow.email }}"
+      - name: Print arrow.default_branch
+        run: echo "arrow.default_branch = {{ arrow.default_branch }}"
 
     {% if macros.is_default_branch() %}
       {{ macros.github_login_dockerhub()|indent }}

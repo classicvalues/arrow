@@ -741,7 +741,7 @@ class Target(Serializable):
         self.version = version
         self.no_rc_version = re.sub(r'-rc\d+\Z', '', version)
         # TODO: Remove "master" from default_branch after migration to "main".
-        self.default_branch = "main"
+        self.default_branch = 'main'
         # Semantic Versioning 1.0.0: https://semver.org/spec/v1.0.0.html
         #
         # > A pre-release version number MAY be denoted by appending an
@@ -775,8 +775,6 @@ class Target(Serializable):
             version = get_version(repo.path)
         if email is None:
             email = repo.user_email
-        if default_branch is None:
-            default_branch = "main"
 
         return cls(head=head, email=email, branch=branch, remote=remote,
                    version=version)

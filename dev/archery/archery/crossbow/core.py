@@ -775,6 +775,8 @@ class Target(Serializable):
             version = get_version(repo.path)
         if email is None:
             email = repo.user_email
+        if default_branch is None:
+            default_branch = "main"
 
         return cls(head=head, email=email, branch=branch, remote=remote,
                    version=version)

@@ -735,7 +735,7 @@ class Target(Serializable):
     def __init__(self, head, branch, remote, version, email=None):
         self.head = head
         self.email = email
-        self.branch = branch
+        self.branch2 = branch
         self.remote = remote
         self.github_repo = "/".join(_parse_github_user_repo(remote))
         self.version = version

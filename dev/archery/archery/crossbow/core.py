@@ -735,13 +735,13 @@ class Target(Serializable):
     def __init__(self, head, branch, remote, version, email=None):
         self.head = head
         self.email = email
-        self.branch2 = branch
+        self.branch = branch
         self.remote = remote
         self.github_repo = "/".join(_parse_github_user_repo(remote))
         self.version = version
         self.no_rc_version = re.sub(r'-rc\d+\Z', '', version)
         # TODO: Remove "master" from default_branch after migration to "main".
-        self.default_branch = 'main'
+        self.default_branch = ['main', 'master']
         # Semantic Versioning 1.0.0: https://semver.org/spec/v1.0.0.html
         #
         # > A pre-release version number MAY be denoted by appending an

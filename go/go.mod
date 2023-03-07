@@ -35,10 +35,10 @@ require (
 	github.com/stretchr/testify v1.7.2
 	github.com/zeebo/xxh3 v1.0.1
 	golang.org/x/exp v0.0.0-20211216164055-b2b84827b756
-	golang.org/x/net v0.0.0-20220127200216-cd36cc0744dd // indirect
-	golang.org/x/sync v0.0.0-20220513210516-0976fa681c29
-	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad
-	golang.org/x/tools v0.1.10
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/sync v0.0.0-20220722155255-886fb9371eb4
+	golang.org/x/sys v0.5.0
+	golang.org/x/tools v0.1.12
 	golang.org/x/xerrors v0.0.0-20220411194840-2f41105eb62f
 	gonum.org/v1/gonum v0.9.3
 	google.golang.org/genproto v0.0.0-20220126215142-9970aeb2e350 // indirect
